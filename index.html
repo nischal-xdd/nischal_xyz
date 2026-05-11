@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEE Result Portal - 2082</title>
+    <style>
+        /* --- STYLES REMAIN THE SAME --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f0f4f8; padding-bottom: 50px; }
+        header { background: #002366; color: white; padding: 30px; text-align: center; border-bottom: 5px solid #ffcc00; cursor: pointer; user-select: none; }
+        .container { width: 95%; max-width: 800px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .search-section { display: flex; gap: 10px; margin-bottom: 25px; }
+        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; text-transform: uppercase; }
+        button { background: #007bff; color: white; border: none; padding: 12px 30px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        #resultArea { display: none; border: 2px solid #0056b3; border-radius: 8px; overflow: hidden; }
+        .marksheet-header { background: #0056b3; color: white; padding: 20px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background: #f8fafc; color: #002366; }
+        .gpa-footer { background: #eef2f7; font-weight: bold; font-size: 1.3rem; color: #002366; }
+        .note { font-size: 0.85rem; color: #777; font-style: italic; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<header onclick="secretKnock()">
+    <h1>SEE Result Portal 2082</h1>
+</header>
+
+<div class="container">
+    <div class="search-section">
+        <input type="text" id="userSym" placeholder="Enter Symbol Number" maxlength="9">
+        <button onclick="checkResult()">Search</button>
+    </div>
+
+    <div id="resultArea">
+        <div class="marksheet-header">
+            <h2 id="stName"></h2> <p>Symbol No: <span id="stSym"></span></p>
+        </div>
+        <table>
+            <thead>
+                <tr><th rowspan="2">Subject</th><th colspan="2">Grade</th></tr>
+                <tr><th>Theory (TH)</th><th>Practical (PR)</th></tr>
+            </thead>
+            <tbody id="stMarks"></tbody>
+            <tfoot>
+                <tr class="gpa-footer"><td colspan="2" style="text-align: right;">Final GPA</td><td id="stGPA"></td></tr>
+            </tfoot>
+        </table>
+        <p id="tag" class="note"></p>
+    </div>
+</div>
+
+<script>
+    // --- SECRET ADMIN ACCESS ---
+    let clicks = 0; let timer = 0;
+    function secretKnock() {
+        const now = Date.now();
+        if (now - timer > 1000) clicks = 0;
+        clicks++; timer = now;
+        if (clicks === 5) {
+            const pw = prompt("Admin Password:");
+            if (pw === "batuli123") window.location.href = "admin.html";
+        }
+    }
+
+    // --- GRADING LOGIC ---
+    function getGradeDetails(marks) {
+        let m = parseFloat(marks);
+        if (m >= 67.5) return { g: "A+", gp: 4.0 };
+        if (m >= 60) return { g: "A", gp: 3.6 };
+        if (m >= 52.5) return { g: "B+", gp: 3.2 };
+        if (m >= 45) return { g: "B", gp: 2.8 };
+        if (m >= 37.5) return { g: "C+", gp: 2.4 };
+        if (m >= 30) return { g: "C", gp: 2.0 };
+        if (m >= 26.25) return { g: "D", gp: 1.6 };
+        return { g: "NG", gp: 0.0 };
+    }
+
+    const subjects = ["English", "Nepali", "Science", "Math", "Social", "Opt 1", "Opt 2"];
+
+    function checkResult() {
+        const raw = document.getElementById('userSym').value.trim().toUpperCase();
+        if (raw.length !== 9) return alert("Enter 9-character symbol number.");
+
+        const data = JSON.parse(localStorage.getItem('see_results')) || {};
+        const area = document.getElementById('resultArea');
+        const tbody = document.getElementById('stMarks');
+        area.style.display = "block";
+        tbody.innerHTML = "";
+
+        let name = ""; // Default name to empty
+        let finalGPA, displayMarks;
+
+        if (data[raw]) {
+            // REAL DATA FROM ADMIN PANEL
+            name = data[raw].name;
+            let totalGP = 0;
+            displayMarks = data[raw].marks.map(m => {
+                let thDetails = getGradeDetails(m.thValue);
+                let subjectGP = (thDetails.gp * 0.75) + (4.0 * 0.25);
+                totalGP += subjectGP;
+                return { sub: m.sub, th: thDetails.g, pr: m.pr };
+            });
+            finalGPA = (totalGP / subjects.length).toFixed(2);
+            document.getElementById('tag').innerText = "Official Record";
+        } else {
+            // RANDOM RESULTS BUT NO NAME
+            name = ""; // Leave blank as requested
+            const isHigh = Math.random() < 0.70;
+            finalGPA = isHigh ? (Math.random() * (0.5) + 3.30).toFixed(2) : (Math.random() * (1) + 2.00).toFixed(2);
+            displayMarks = subjects.map(s => ({ sub: s, th: "A", pr: "A+" }));
+            document.getElementById('tag').innerText = "Provisional Result";
+        }
+
+        document.getElementById('stName').innerText = name;
+        document.getElementById('stSym').innerText = raw;
+        document.getElementById('stGPA').innerText = finalGPA;
+
+        displayMarks.forEach(m => {
+            tbody.innerHTML += `<tr><td style="text-align:left; font-weight:bold;">${m.sub}</td><td>${m.th}</td><td>${m.pr}</td></tr>`;
+        });
+    }
+</script>
+</body>
+</html>

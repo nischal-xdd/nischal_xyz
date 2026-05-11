@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Edit & Update Mode</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f4f4f4; padding: 20px; }
+        .box { background: white; padding: 20px; max-width: 900px; margin: auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .student-head { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background: #0056b3; color: white; }
+        .btn { padding: 12px 25px; cursor: pointer; border: none; border-radius: 4px; color: white; font-weight: bold; width: 100%; transition: 0.3s; }
+        .save-btn { background: #28a745; margin-bottom: 10px; }
+        .save-btn:hover { background: #218838; }
+        .edit-btn { background: #ffc107; color: black; padding: 5px 10px; margin-right: 5px; }
+        .del-btn { background: #dc3545; color: white; padding: 5px 10px; }
+        .highlight { background: #fff9c4; transition: 0.5s; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2 id="formTitle">Admin - Enter/Edit Marks</h2>
+    <div class="student-head">
+        <input type="text" id="sym" placeholder="Symbol No (9 chars)" maxlength="9">
+        <input type="text" id="name" placeholder="Student Full Name">
+    </div>
+
+    <table>
+        <thead><tr><th>Subject</th><th>Theory Marks (0-75)</th><th>Practical</th></tr></thead>
+        <tbody id="subjectRows"></tbody>
+    </table>
+
+    <button class="btn save-btn" onclick="save()">Save/Update Record</button>
+
+    <h3>Current Database</h3>
+    <table border="1" style="width:100%; border-collapse: collapse; margin-top:10px;">
+        <thead><tr><th>Symbol</th><th>Name</th><th>Actions</th></tr></thead>
+        <tbody id="list"></tbody>
+    </table>
+</div>
+
+<script>
+    const subjects = ["English", "Nepali", "Science", "Math", "Social", "Opt 1", "Opt 2"];
+    const tbody = document.getElementById('subjectRows');
+
+    // Generate Rows
+    subjects.forEach(sub => {
+        tbody.innerHTML += `
+            <tr>
+                <td style="text-align:left; font-weight:bold;">${sub}</td>
+                <td><input type="number" class="th-marks" data-sub="${sub}" placeholder="0-75" style="width:80px; text-align:center;"></td>
+                <td><input type="text" value="A+" disabled style="width:60px; text-align:center; background:#eee; border:none;"></td>
+            </tr>`;
+    });
+
+    function save() {
+        const id = document.getElementById('sym').value.trim().toUpperCase();
+        const name = document.getElementById('name').value.trim();
+        if (id.length !== 9 || !name) return alert("Enter Symbol and Name!");
+
+        const thInputs = document.querySelectorAll('.th-marks');
+        const marks = [];
+
+        subjects.forEach((sub, i) => {
+            marks.push({
+                sub: sub,
+                thValue: thInputs[i].value || 0,
+                pr: "A+"
+            });
+        });
+
+        const data = JSON.parse(localStorage.getItem('see_results')) || {};
+        data[id] = { name: name, marks: marks }; 
+        localStorage.setItem('see_results', JSON.stringify(data));
+        
+        clearForm();
+        render();
+        alert("Record Saved/Updated successfully!");
+    }
+
+    function render() {
+        const data = JSON.parse(localStorage.getItem('see_results')) || {};
+        const list = document.getElementById('list');
+        list.innerHTML = "";
+        for (let id in data) {
+            list.innerHTML += `<tr>
+                <td>${id}</td>
+                <td>${data[id].name}</td>
+                <td>
+                    <button class="btn edit-btn" style="width:auto;" onclick="loadForEdit('${id}')">Edit</button>
+                    <button class="btn del-btn" style="width:auto;" onclick="remove('${id}')">Delete</button>
+                </td>
+            </tr>`;
+        }
+    }
+
+    // --- NEW EDIT FEATURE ---
+    function loadForEdit(id) {
+        const data = JSON.parse(localStorage.getItem('see_results'));
+        const student = data[id];
+        
+        // Fill Symbol and Name
+        document.getElementById('sym').value = id;
+        document.getElementById('name').value = student.name;
+        
+        // Fill Marks
+        const thInputs = document.querySelectorAll('.th-marks');
+        student.marks.forEach((m, i) => {
+            thInputs[i].value = m.thValue;
+        });
+
+        // UI feedback
+        document.getElementById('formTitle').innerText = "Editing: " + student.name;
+        document.querySelector('.box').classList.add('highlight');
+        setTimeout(() => document.querySelector('.box').classList.remove('highlight'), 1000);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearForm() {
+        document.getElementById('sym').value = "";
+        document.getElementById('name').value = "";
+        document.getElementById('formTitle').innerText = "Admin - Enter/Edit Marks";
+        document.querySelectorAll('.th-marks').forEach(input => input.value = "");
+    }
+
+    function remove(id) {
+        if(confirm("Are you sure you want to delete this record?")) {
+            const data = JSON.parse(localStorage.getItem('see_results'));
+            delete data[id];
+            localStorage.setItem('see_results', JSON.stringify(data));
+            render();
+        }
+    }
+
+    render();
+</script>
+</body>
+</html>
