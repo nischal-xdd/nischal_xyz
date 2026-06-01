@@ -1,127 +1,999 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEE Result Portal - 2082</title>
-    <style>
-        /* --- STYLES REMAIN THE SAME --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f0f4f8; padding-bottom: 50px; }
-        header { background: #002366; color: white; padding: 30px; text-align: center; border-bottom: 5px solid #ffcc00; cursor: pointer; user-select: none; }
-        .container { width: 95%; max-width: 800px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        .search-section { display: flex; gap: 10px; margin-bottom: 25px; }
-        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; text-transform: uppercase; }
-        button { background: #007bff; color: white; border: none; padding: 12px 30px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        #resultArea { display: none; border: 2px solid #0056b3; border-radius: 8px; overflow: hidden; }
-        .marksheet-header { background: #0056b3; color: white; padding: 20px; text-align: center; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-        th { background: #f8fafc; color: #002366; }
-        .gpa-footer { background: #eef2f7; font-weight: bold; font-size: 1.3rem; color: #002366; }
-        .note { font-size: 0.85rem; color: #777; font-style: italic; text-align: center; margin-top: 15px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nischal Adhikari — Graphic Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f0ece3;
+    --accent: #ff4d1c;
+    --accent2: #ffd447;
+    --muted: #7a7670;
+    --card: #ffffff;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-trail {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.25s ease, width 0.2s, height 0.2s;
+    mix-blend-mode: difference;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; width: 100%;
+    padding: 1.4rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(10,10,15,0.6);
+    border-bottom: 1px solid rgba(240,236,227,0.06);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--paper); }
+  .hire-nav {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 0.5rem 1.4rem;
+    border-radius: 2rem;
+    font-weight: 600 !important;
+    transition: transform 0.2s, background 0.2s !important;
+  }
+  .hire-nav:hover { background: #ff6a3d !important; transform: scale(1.05); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 3rem 3rem;
+  }
+
+  /* 3D canvas BG */
+  #hero-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.35rem 1rem;
+    border-radius: 2rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 9vw, 7.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s forwards;
+  }
+  h1 em { font-style: italic; color: var(--accent2); }
+
+  .hero-sub {
+    margin-top: 1.8rem;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 520px;
+    margin-left: auto; margin-right: auto;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 0.9rem 2.4rem;
+    border-radius: 3rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 0 0 rgba(255,77,28,0.5);
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(255,77,28,0.4);
+  }
+  .btn-ghost {
+    border: 1.5px solid rgba(240,236,227,0.3);
+    color: var(--paper);
+    padding: 0.9rem 2.4rem;
+    border-radius: 3rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--paper); background: rgba(240,236,227,0.07); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    opacity: 0; animation: fadeUp 1s 1.3s forwards;
+  }
+  .scroll-hint span { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* ─── SECTION SHARED ─── */
+  section { padding: 7rem 3rem; }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .section-title em { font-style: italic; color: var(--accent2); }
+
+  /* ─── WORKS ─── */
+  #works { background: var(--ink); }
+  .works-header {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;
+  }
+  .works-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.2rem;
+  }
+  .work-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+    transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+    transform-style: preserve-3d;
+  }
+  .work-card:nth-child(1) { grid-column: span 7; grid-row: span 1; }
+  .work-card:nth-child(2) { grid-column: span 5; }
+  .work-card:nth-child(3) { grid-column: span 5; }
+  .work-card:nth-child(4) { grid-column: span 7; }
+  .work-card:nth-child(5) { grid-column: span 12; }
+
+  .work-card:hover { transform: translateY(-6px) scale(1.01); }
+
+  .work-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.23,1,0.32,1);
+  }
+  .work-card:hover .work-img { transform: scale(1.06); }
+  .work-card:nth-child(5) .work-img { aspect-ratio: 21/7; }
+
+  .work-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,15,0.95) 0%, transparent 55%);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .work-card:hover .work-overlay { opacity: 1; }
+  .work-cat {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .work-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  /* ─── HIRE ME ─── */
+  #hire {
+    background: var(--accent);
+    text-align: center;
+    padding: 6rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  #hire::before {
+    content: 'HIRE ME';
+    position: absolute;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(8rem, 22vw, 18rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: rgba(255,255,255,0.07);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  #hire .section-title { color: #fff; font-size: clamp(2.5rem, 6vw, 4.5rem); }
+  #hire .section-title em { color: var(--ink); font-style: italic; }
+  #hire p { color: rgba(255,255,255,0.8); margin: 1.2rem auto 2.5rem; max-width: 500px; font-size: 1.05rem; line-height: 1.7; }
+  .btn-dark {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 1rem 2.8rem;
+    border-radius: 3rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-dark:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,0,0,0.3); }
+
+  /* ─── TESTIMONIALS ─── */
+  #testimonials {
+    background: #0f0f14;
+    overflow: hidden;
+  }
+  .test-header { max-width: 1200px; margin: 0 auto 4rem; }
+
+  .test-track-wrap {
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .test-track-wrap::before, .test-track-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .test-track-wrap::before { left: 0; background: linear-gradient(to right, #0f0f14, transparent); }
+  .test-track-wrap::after { right: 0; background: linear-gradient(to left, #0f0f14, transparent); }
+
+  .test-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: scrollLeft 30s linear infinite;
+  }
+  .test-track:hover { animation-play-state: paused; }
+
+  .test-card {
+    background: rgba(240,236,227,0.04);
+    border: 1px solid rgba(240,236,227,0.08);
+    border-radius: 1.2rem;
+    padding: 2rem 2.2rem;
+    width: 360px;
+    flex-shrink: 0;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .test-card:hover { background: rgba(240,236,227,0.07); border-color: rgba(255,77,28,0.3); }
+
+  .stars { color: var(--accent2); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 1rem; }
+  .test-text { font-size: 0.95rem; line-height: 1.75; color: rgba(240,236,227,0.75); font-style: italic; margin-bottom: 1.5rem; }
+  .test-author { display: flex; align-items: center; gap: 0.9rem; }
+  .test-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
+    color: #fff;
+  }
+  .test-info strong { display: block; font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; }
+  .test-info span { font-size: 0.75rem; color: var(--muted); }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--ink); }
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .contact-left p { color: var(--muted); margin-top: 1.2rem; line-height: 1.8; max-width: 420px; }
+
+  .contact-details { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-item { display: flex; align-items: center; gap: 1rem; }
+  .contact-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(240,236,227,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .contact-item-text strong { display: block; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.15rem; }
+  .contact-item-text span { font-size: 0.95rem; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .field { display: flex; flex-direction: column; gap: 0.5rem; }
+  .field label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .field input, .field textarea, .field select {
+    background: rgba(240,236,227,0.05);
+    border: 1px solid rgba(240,236,227,0.1);
+    border-radius: 0.7rem;
+    padding: 0.85rem 1.1rem;
+    color: var(--paper);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    border-color: var(--accent);
+    background: rgba(255,77,28,0.05);
+  }
+  .field select option { background: #1a1a20; }
+  .field textarea { min-height: 130px; }
+  .submit-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 1rem 2.4rem;
+    border-radius: 3rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: flex-start;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  .submit-btn:hover::after { transform: translateX(0); }
+  .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(255,77,28,0.45); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #07070a;
+    padding: 2.5rem 3rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    border-top: 1px solid rgba(240,236,227,0.07);
+  }
+  footer .logo { font-size: 1rem; }
+  footer p { font-size: 0.8rem; color: var(--muted); }
+  .social-links { display: flex; gap: 1.2rem; }
+  .social-links a {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(240,236,227,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .social-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.35s; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50%       { opacity: 1; transform: scaleY(1.15); }
+  }
+  @keyframes scrollLeft {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes float3d {
+    0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+    33%       { transform: rotateX(6deg) rotateY(8deg); }
+    66%       { transform: rotateX(-4deg) rotateY(-5deg); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .works-grid { grid-template-columns: 1fr; }
+    .work-card:nth-child(n) { grid-column: span 1; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+    .cursor, .cursor-trail { display: none; }
+  }
+</style>
 </head>
 <body>
 
-<header onclick="secretKnock()">
-    <h1>SEE Result Portal 2082</h1>
-</header>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
 
-<div class="container">
-    <div class="search-section">
-        <input type="text" id="userSym" placeholder="Enter Symbol Number" maxlength="9">
-        <button onclick="checkResult()">Search</button>
+<!-- NAV -->
+<nav>
+  <div class="logo">Nis<span>c</span>hal</div>
+  <ul class="nav-links">
+    <li><a href="#works">Works</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#hire" class="hire-nav">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="hero-tag">✦ Available for Projects</div>
+    <h1>Nischal<br><em>Adhikari</em></h1>
+    <p class="hero-sub">Graphic Designer crafting bold visual identities, brand stories, and digital experiences that leave a mark.</p>
+    <div class="hero-cta">
+      <a href="#works" class="btn-primary">View My Work</a>
+      <a href="#hire" class="btn-ghost">Hire Me →</a>
     </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
 
-    <div id="resultArea">
-        <div class="marksheet-header">
-            <h2 id="stName"></h2> <p>Symbol No: <span id="stSym"></span></p>
+<!-- WORKS -->
+<section id="works">
+  <div class="works-header">
+    <div>
+      <div class="section-label reveal">Selected Works</div>
+      <h2 class="section-title reveal reveal-delay-1">Projects that<br><em>tell stories</em></h2>
+    </div>
+    <a href="#contact" class="btn-ghost reveal reveal-delay-2" style="font-size:0.85rem; padding:0.7rem 1.8rem;">All Projects →</a>
+  </div>
+
+  <div class="works-grid">
+    <div class="work-card reveal">
+      <img class="work-img" src="https://images.unsplash.com/photo-1634986666676-ec8fd927c23d?w=900&q=80" alt="Brand Identity">
+      <div class="work-overlay">
+        <div class="work-cat">Brand Identity</div>
+        <div class="work-name">Luminary Cosmetics — Full Brand System</div>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-1">
+      <img class="work-img" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80" alt="Poster Design">
+      <div class="work-overlay">
+        <div class="work-cat">Poster Design</div>
+        <div class="work-name">Urban Festival Series</div>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-2">
+      <img class="work-img" src="https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=600&q=80" alt="Typography">
+      <div class="work-overlay">
+        <div class="work-cat">Typography</div>
+        <div class="work-name">Editorial Layout — ARCH Magazine</div>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-1">
+      <img class="work-img" src="https://images.unsplash.com/photo-1561070791-36a5ab77f24d?w=900&q=80" alt="UI Design">
+      <div class="work-overlay">
+        <div class="work-cat">UI / Digital</div>
+        <div class="work-name">FinTech Dashboard — Nexus App</div>
+      </div>
+    </div>
+    <div class="work-card reveal">
+      <img class="work-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" alt="Packaging">
+      <div class="work-overlay">
+        <div class="work-cat">Packaging</div>
+        <div class="work-name">Himalayan Brew — Craft Beer Packaging Line</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HIRE ME -->
+<section id="hire">
+  <div class="reveal">
+    <h2 class="section-title">Let's create something<br><em>remarkable</em> together</h2>
+    <p>I'm currently open for freelance projects, brand collaborations, and full-time opportunities. Let's talk.</p>
+    <a href="#contact" class="btn-dark">Start a Project →</a>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="test-header">
+    <div class="section-label reveal">Testimonials</div>
+    <h2 class="section-title reveal reveal-delay-1">What clients<br><em>say</em></h2>
+  </div>
+  <div class="test-track-wrap reveal">
+    <div class="test-track" id="testTrack">
+      <!-- Cards duplicated for seamless loop -->
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Nischal transformed our brand identity from scratch. The logo, palette, and typography he designed gave us instant credibility with investors."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#ff4d1c,#ff9a3c);">A</div>
+          <div class="test-info"><strong>Ayesha Karmacharya</strong><span>CEO, Vridhi Ventures</span></div>
         </div>
-        <table>
-            <thead>
-                <tr><th rowspan="2">Subject</th><th colspan="2">Grade</th></tr>
-                <tr><th>Theory (TH)</th><th>Practical (PR)</th></tr>
-            </thead>
-            <tbody id="stMarks"></tbody>
-            <tfoot>
-                <tr class="gpa-footer"><td colspan="2" style="text-align: right;">Final GPA</td><td id="stGPA"></td></tr>
-            </tfoot>
-        </table>
-        <p id="tag" class="note"></p>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"The poster series for our music festival was beyond expectations. People were photographing them everywhere. Pure artistry."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#7c3aed,#db2777);">R</div>
+          <div class="test-info"><strong>Rohan Shrestha</strong><span>Event Director, Kathmandu Beats</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Working with Nischal is effortless. He understands the brief deeply and always delivers something that surprises and delights."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#059669,#0284c7);">P</div>
+          <div class="test-info"><strong>Priya Thapa</strong><span>Marketing Lead, Himalayan Tea Co.</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Our app UI redesign by Nischal increased user engagement by 40%. He doesn't just make things pretty — he makes them work beautifully."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#d97706,#dc2626);">S</div>
+          <div class="test-info"><strong>Suresh Maharjan</strong><span>CTO, Nexus Digital</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"The packaging he created for our craft beer line won us a regional design award. Our shelves are impossible to walk past."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#0ea5e9,#6366f1);">B</div>
+          <div class="test-info"><strong>Bikram Gurung</strong><span>Founder, Himalayan Brew</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Nischal's editorial layouts for our magazine brought us a 30% increase in print subscriptions. Simply remarkable design thinking."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#ec4899,#f59e0b);">M</div>
+          <div class="test-info"><strong>Manisha Bista</strong><span>Editor-in-Chief, ARCH Magazine</span></div>
+        </div>
+      </div>
+      <!-- Duplicated set for seamless loop -->
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Nischal transformed our brand identity from scratch. The logo, palette, and typography he designed gave us instant credibility with investors."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#ff4d1c,#ff9a3c);">A</div>
+          <div class="test-info"><strong>Ayesha Karmacharya</strong><span>CEO, Vridhi Ventures</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"The poster series for our music festival was beyond expectations. People were photographing them everywhere. Pure artistry."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#7c3aed,#db2777);">R</div>
+          <div class="test-info"><strong>Rohan Shrestha</strong><span>Event Director, Kathmandu Beats</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Working with Nischal is effortless. He understands the brief deeply and always delivers something that surprises and delights."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#059669,#0284c7);">P</div>
+          <div class="test-info"><strong>Priya Thapa</strong><span>Marketing Lead, Himalayan Tea Co.</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="test-text">"Our app UI redesign by Nischal increased user engagement by 40%. He doesn't just make things pretty — he makes them work beautifully."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background: linear-gradient(135deg,#d97706,#dc2626);">S</div>
+          <div class="test-info"><strong>Suresh Maharjan</strong><span>CTO, Nexus Digital</span></div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="section-label reveal">Get in Touch</div>
+      <h2 class="section-title reveal reveal-delay-1">Let's work<br><em>together</em></h2>
+      <p class="reveal reveal-delay-2">Have a project in mind? I'd love to hear about it. Send me a message and I'll get back to you within 24 hours.</p>
+      <div class="contact-details reveal reveal-delay-3">
+        <div class="contact-item">
+          <div class="contact-icon">✉</div>
+          <div class="contact-item-text">
+            <strong>Email</strong>
+            <span>nischaladk066@gmail.com</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-item-text">
+            <strong>Location</strong>
+            <span>Chitwan, Nepal</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">⏱</div>
+          <div class="contact-item-text">
+            <strong>Response Time</strong>
+            <span>Within 24 hours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" placeholder="Aarav">
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" placeholder="Sharma">
+          </div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="hello@yourcompany.com">
+        </div>
+        <div class="field">
+          <label>Project Type</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Brand Identity</option>
+            <option>Poster / Print Design</option>
+            <option>UI / Digital Design</option>
+            <option>Packaging Design</option>
+            <option>Editorial / Layout</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Message</label>
+          <textarea placeholder="Tell me about your project, timeline, and budget..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Send Message ✦</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Nis<span>c</span>hal</div>
+  <p>© 2025 Nischal Adhikari ✦</p>
+  <div class="social-links">
+    <a href="#" title="Behance">Be</a>
+    <a href="#" title="Dribbble">Dr</a>
+    <a href="#" title="Instagram">Ig</a>
+    <a href="#" title="LinkedIn">in</a>
+  </div>
+</footer>
 
 <script>
-    // --- SECRET ADMIN ACCESS ---
-    let clicks = 0; let timer = 0;
-    function secretKnock() {
-        const now = Date.now();
-        if (now - timer > 1000) clicks = 0;
-        clicks++; timer = now;
-        if (clicks === 5) {
-            const pw = prompt("Admin Password:");
-            if (pw === "batuli123") window.location.href = "admin.html";
-        }
+// ── CUSTOM CURSOR ──
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+});
+function animTrail() {
+  tx += (mx - tx - 18) * 0.15;
+  ty += (my - ty - 18) * 0.15;
+  trail.style.transform = `translate(${tx}px, ${ty}px)`;
+  requestAnimationFrame(animTrail);
+}
+animTrail();
+
+document.querySelectorAll('a, button, .work-card, .test-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform += ' scale(2)';
+    trail.style.width = '60px'; trail.style.height = '60px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = cursor.style.transform.replace(' scale(2)', '');
+    trail.style.width = '36px'; trail.style.height = '36px';
+  });
+});
+
+// ── 3D CANVAS HERO ──
+const canvas = document.getElementById('hero-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], t = 0;
+
+function resize() {
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Floating geometric shapes
+const shapes = [];
+for (let i = 0; i < 18; i++) {
+  shapes.push({
+    x: Math.random() * 1200,
+    y: Math.random() * 800,
+    z: Math.random() * 600 + 100,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.3,
+    vz: (Math.random() - 0.5) * 0.5,
+    size: Math.random() * 30 + 10,
+    rot: Math.random() * Math.PI * 2,
+    vrot: (Math.random() - 0.5) * 0.015,
+    type: ['tri', 'sq', 'diamond', 'circle'][Math.floor(Math.random() * 4)],
+    color: ['#ff4d1c', '#ffd447', '#ffffff', '#ff9a3c', '#6366f1'][Math.floor(Math.random() * 5)]
+  });
+}
+
+// Grid lines
+const GRID = 10;
+
+function drawGrid() {
+  const fov = 600;
+  const camY = H * 0.6;
+  ctx.strokeStyle = 'rgba(255,77,28,0.08)';
+  ctx.lineWidth = 1;
+  const cols = 20, rows = 20;
+  const size = 80;
+  const ox = W / 2, oy = camY;
+
+  for (let r = 0; r <= rows; r++) {
+    const depth = r * size;
+    const scale = fov / (fov + depth + t * 30 % (size * rows));
+    for (let c = 0; c <= cols; c++) {
+      const x = (c - cols / 2) * size * scale + ox;
+      const y = oy - depth * 0.4 * scale;
     }
+    // Horizontal grid lines
+    const d0 = (r * size + t * 30 % (size * rows));
+    const d1 = ((r + 1) * size + t * 30 % (size * rows));
+    const s0 = fov / (fov + d0), s1 = fov / (fov + d1);
+    ctx.beginPath();
+    ctx.moveTo((-cols / 2) * size * s0 + ox, oy - d0 * 0.4 * s0);
+    ctx.lineTo((cols / 2) * size * s0 + ox, oy - d0 * 0.4 * s0);
+    ctx.stroke();
+  }
+  for (let c = 0; c <= cols; c++) {
+    ctx.beginPath();
+    const x0 = (c - cols / 2) * size;
+    const d_near = t * 30 % (size * rows);
+    const d_far = rows * size + d_near;
+    const s_near = fov / (fov + d_near), s_far = fov / (fov + d_far);
+    ctx.moveTo(x0 * s_near + ox, oy - d_near * 0.4 * s_near);
+    ctx.lineTo(x0 * s_far + ox, oy - d_far * 0.4 * s_far);
+    ctx.stroke();
+  }
+}
 
-    // --- GRADING LOGIC ---
-    function getGradeDetails(marks) {
-        let m = parseFloat(marks);
-        if (m >= 67.5) return { g: "A+", gp: 4.0 };
-        if (m >= 60) return { g: "A", gp: 3.6 };
-        if (m >= 52.5) return { g: "B+", gp: 3.2 };
-        if (m >= 45) return { g: "B", gp: 2.8 };
-        if (m >= 37.5) return { g: "C+", gp: 2.4 };
-        if (m >= 30) return { g: "C", gp: 2.0 };
-        if (m >= 26.25) return { g: "D", gp: 1.6 };
-        return { g: "NG", gp: 0.0 };
-    }
+function drawShape(s, alpha) {
+  const fov = 500;
+  const scale = fov / (fov + s.z);
+  const px = (s.x - W / 2) * scale + W / 2;
+  const py = (s.y - H / 2) * scale + H / 2;
+  const sz = s.size * scale;
 
-    const subjects = ["English", "Nepali", "Science", "Math", "Social", "Opt 1", "Opt 2"];
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.rotate(s.rot);
+  ctx.globalAlpha = alpha * scale * 0.7;
+  ctx.strokeStyle = s.color;
+  ctx.lineWidth = 1.5 * scale;
+  ctx.fillStyle = 'transparent';
+  ctx.beginPath();
 
-    function checkResult() {
-        const raw = document.getElementById('userSym').value.trim().toUpperCase();
-        if (raw.length !== 9) return alert("Enter 9-character symbol number.");
+  if (s.type === 'tri') {
+    ctx.moveTo(0, -sz); ctx.lineTo(sz * 0.866, sz * 0.5); ctx.lineTo(-sz * 0.866, sz * 0.5); ctx.closePath();
+  } else if (s.type === 'sq') {
+    ctx.rect(-sz / 2, -sz / 2, sz, sz);
+  } else if (s.type === 'diamond') {
+    ctx.moveTo(0, -sz); ctx.lineTo(sz, 0); ctx.lineTo(0, sz); ctx.lineTo(-sz, 0); ctx.closePath();
+  } else {
+    ctx.arc(0, 0, sz, 0, Math.PI * 2);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
 
-        const data = JSON.parse(localStorage.getItem('see_results')) || {};
-        const area = document.getElementById('resultArea');
-        const tbody = document.getElementById('stMarks');
-        area.style.display = "block";
-        tbody.innerHTML = "";
+let mouseX = W / 2, mouseY = H / 2;
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  mouseX = e.clientX - r.left;
+  mouseY = e.clientY - r.top;
+});
 
-        let name = ""; // Default name to empty
-        let finalGPA, displayMarks;
+function animate() {
+  ctx.clearRect(0, 0, W, H);
 
-        if (data[raw]) {
-            // REAL DATA FROM ADMIN PANEL
-            name = data[raw].name;
-            let totalGP = 0;
-            displayMarks = data[raw].marks.map(m => {
-                let thDetails = getGradeDetails(m.thValue);
-                let subjectGP = (thDetails.gp * 0.75) + (4.0 * 0.25);
-                totalGP += subjectGP;
-                return { sub: m.sub, th: thDetails.g, pr: m.pr };
-            });
-            finalGPA = (totalGP / subjects.length).toFixed(2);
-            document.getElementById('tag').innerText = "Official Record";
-        } else {
-            // RANDOM RESULTS BUT NO NAME
-            name = ""; // Leave blank as requested
-            const isHigh = Math.random() < 0.70;
-            finalGPA = isHigh ? (Math.random() * (0.5) + 3.30).toFixed(2) : (Math.random() * (1) + 2.00).toFixed(2);
-            displayMarks = subjects.map(s => ({ sub: s, th: "A", pr: "A+" }));
-            document.getElementById('tag').innerText = "Provisional Result";
-        }
+  // Background gradient
+  const grad = ctx.createRadialGradient(W / 2, H * 0.4, 0, W / 2, H / 2, W * 0.8);
+  grad.addColorStop(0, 'rgba(255,77,28,0.06)');
+  grad.addColorStop(0.5, 'rgba(30,10,40,0.0)');
+  grad.addColorStop(1, 'transparent');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
 
-        document.getElementById('stName').innerText = name;
-        document.getElementById('stSym').innerText = raw;
-        document.getElementById('stGPA').innerText = finalGPA;
+  drawGrid();
 
-        displayMarks.forEach(m => {
-            tbody.innerHTML += `<tr><td style="text-align:left; font-weight:bold;">${m.sub}</td><td>${m.th}</td><td>${m.pr}</td></tr>`;
-        });
-    }
+  // Parallax offset from mouse
+  const dx = (mouseX - W / 2) * 0.02;
+  const dy = (mouseY - H / 2) * 0.01;
+
+  shapes.forEach(s => {
+    s.x += s.vx + dx * 0.1;
+    s.y += s.vy + dy * 0.1;
+    s.z += s.vz;
+    s.rot += s.vrot;
+    if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+    if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+    if (s.z < 50) s.z = 700; if (s.z > 700) s.z = 50;
+    const alpha = Math.min(1, (700 - s.z) / 400);
+    drawShape(s, alpha);
+  });
+
+  t += 0.01;
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ── SCROLL REVEAL ──
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }});
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+// ── WORK CARD 3D TILT ──
+document.querySelectorAll('.work-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(600px) rotateY(${x * 12}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// ── FORM SUBMIT ──
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.style.background = '#555';
+  setTimeout(() => {
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = '#16a34a';
+    setTimeout(() => {
+      btn.textContent = 'Send Message ✦';
+      btn.style.background = 'var(--accent)';
+    }, 3000);
+  }, 1400);
+}
+
+// ── NAV HIGHLIGHT ──
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--paper)' : '';
+  });
+});
 </script>
 </body>
 </html>
