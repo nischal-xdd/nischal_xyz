@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist", "Inter", system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-brand-yellow: #FFD700;
+  --color-brand-purple: #8a2be2;
+  --color-brand-lime: #ccff00;
+  --color-bg-black: #000000;
+  --color-surface-dark: #111111;
+  --color-surface-elevated: #18181B;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+}
+
+@layer base {
+  body {
+    background-color: #000000;
+    color: #F8FAFC;
+    font-family: var(--font-sans);
+  }
+}
+
+/* Custom continuous marquee animations */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left-fast {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 25s linear infinite;
+}
+
+.animate-marquee-left-slow {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 45s linear infinite;
+}
+
+.animate-marquee-right-fast {
+  display: flex;
+  width: max-content;
+  animation: scroll-right 28s linear infinite;
+}
+
+/* Subtle glassmorphism */
+.glass-header {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+  background: rgba(24, 24, 27, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.portrait-circle {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  overflow: visible;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .portrait-circle {
+    width: 380px;
+    height: 380px;
+  }
+}
